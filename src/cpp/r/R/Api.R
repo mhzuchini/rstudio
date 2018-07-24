@@ -533,6 +533,13 @@
    invisible(NULL)
 })
 
+# NOTE: id is a placeholder for now; documentClose() only closes active
+# source document currently
+.rs.addApiFunction("documentClose", function(id = NULL)
+{
+   .Call("rs_requestDocumentClose", id, PACKAGE = "(embedding)")
+})
+
 .rs.addApiFunction("getConsoleHasColor", function(name) {
    value <- .rs.readUiPref("ansi_console_mode")
    if (is.null(value) || value != 1) FALSE else TRUE

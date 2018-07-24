@@ -98,6 +98,7 @@ import org.rstudio.studio.client.rmarkdown.model.RmdTemplateData;
 import org.rstudio.studio.client.server.ServerError;
 import org.rstudio.studio.client.server.ServerRequestCallback;
 import org.rstudio.studio.client.server.VoidServerRequestCallback;
+import org.rstudio.studio.client.server.model.RequestDocumentCloseEvent;
 import org.rstudio.studio.client.server.model.RequestDocumentSaveEvent;
 import org.rstudio.studio.client.workbench.ConsoleEditorProvider;
 import org.rstudio.studio.client.workbench.MainWindowObject;
@@ -196,7 +197,8 @@ public class Source implements InsertSourceHandler,
                              ReplaceRangesEvent.Handler,
                              SetSelectionRangesEvent.Handler,
                              GetEditorContextEvent.Handler,
-                             RequestDocumentSaveEvent.Handler
+                             RequestDocumentSaveEvent.Handler,
+                             RequestDocumentCloseEvent.Handler
 {
    public interface Display extends IsWidget,
                                     HasTabClosingHandlers,
@@ -597,6 +599,7 @@ public class Source implements InsertSourceHandler,
       events.addHandler(SetSelectionRangesEvent.TYPE, this);
       events.addHandler(OpenProfileEvent.TYPE, this);
       events.addHandler(RequestDocumentSaveEvent.TYPE, this);
+      events.addHandler(RequestDocumentCloseEvent.TYPE, this);
 
       // Suppress 'CTRL + ALT + SHIFT + click' to work around #2483 in Ace
       Event.addNativePreviewHandler(new NativePreviewHandler()
@@ -4601,6 +4604,19 @@ public class Source implements InsertSourceHandler,
          
          saveUnsavedDocuments(idSet, onCompleted);
       }
+   }
+   
+   @Override
+   public void onRequestDocumentClose(RequestDocumentCloseEvent event)
+   {
+      // only the most recently focused source window handles this event
+      String windowId = SourceWindowManager.getSourceWindowId();
+      if (!StringUtil.equals(windowId, MainWindowObject.lastFocusedWindowId().get()))
+         return;
+      
+      boolean hasTabs = view_.getTabCount() > 0;
+      onCloseSourceDoc();
+      server_.requestDocumentCloseCompleted(hasTabs, new VoidServerRequestCallback());
    }
    
    private void inEditorForPath(String path, 

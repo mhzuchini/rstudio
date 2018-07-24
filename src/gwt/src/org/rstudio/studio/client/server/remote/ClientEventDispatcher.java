@@ -94,6 +94,7 @@ import org.rstudio.studio.client.rsconnect.events.RSConnectDeploymentCompletedEv
 import org.rstudio.studio.client.rsconnect.events.RSConnectDeploymentFailedEvent;
 import org.rstudio.studio.client.rsconnect.events.RSConnectDeploymentOutputEvent;
 import org.rstudio.studio.client.server.Bool;
+import org.rstudio.studio.client.server.model.RequestDocumentCloseEvent;
 import org.rstudio.studio.client.server.model.RequestDocumentSaveEvent;
 import org.rstudio.studio.client.shiny.events.ShinyApplicationStatusEvent;
 import org.rstudio.studio.client.shiny.events.ShinyFrameNavigatedEvent;
@@ -944,6 +945,11 @@ public class ClientEventDispatcher
          {
             RequestDocumentSaveEvent.Data data = event.getData();
             eventBus_.dispatchEvent(new RequestDocumentSaveEvent(data));
+         }
+         else if (type == ClientEvent.RequestDocumentClose)
+         {
+            RequestDocumentCloseEvent.Data data = event.getData();
+            eventBus_.dispatchEvent(new RequestDocumentCloseEvent(data));
          }
          else if (type == ClientEvent.RequestOpenProject)
          {

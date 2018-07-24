@@ -192,6 +192,8 @@ const int kDataOutputCompleted = 173;
 const int kNewDocumentWithCode = 174;
 const int kPlumberViewer = 175;
 const int kAvailablePackagesReady = 176;
+const int kRequestDocumentClose = 177;
+const int kRequestDocumentCloseCompleted = 178;
 }
 
 void ClientEvent::init(int type, const json::Value& data)
@@ -531,6 +533,10 @@ std::string ClientEvent::typeName() const
          return "available_packages_ready";
       case client_events::kPlumberViewer:
          return "plumber_viewer";
+      case client_events::kRequestDocumentClose:
+         return "request_document_close";
+      case client_events::kRequestDocumentCloseCompleted:
+         return "request_document_close_completed";
       default:
          LOG_WARNING_MESSAGE("unexpected event type: " + 
                              safe_convert::numberToString(type_));

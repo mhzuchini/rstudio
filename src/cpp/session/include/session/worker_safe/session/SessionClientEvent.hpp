@@ -193,6 +193,8 @@ extern const int kDataOutputCompleted;
 extern const int kNewDocumentWithCode;
 extern const int kPlumberViewer;
 extern const int kAvailablePackagesReady;
+extern const int kRequestDocumentClose;
+extern const int kRequestDocumentCloseCompleted;
 }
    
 class ClientEvent

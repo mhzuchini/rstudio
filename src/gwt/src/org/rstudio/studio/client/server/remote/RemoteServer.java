@@ -2130,6 +2130,17 @@ public class RemoteServer implements Server
                   params,
                   requestCallback);
    }
+   
+   public void requestDocumentCloseCompleted(boolean isSuccessfulClose,
+                                             ServerRequestCallback<Void> requestCallback)
+   {
+      JSONArray params = new JSONArray();
+      params.set(0, JSONBoolean.getInstance(isSuccessfulClose));
+      sendRequest(RPC_SCOPE,
+                  REQUEST_DOCUMENT_CLOSE_COMPLETED,
+                  params,
+                  requestCallback);
+   }
 
    public void modifyDocumentProperties(
          String id,
@@ -5695,6 +5706,7 @@ public class RemoteServer implements Server
    private static final String SET_SOURCE_DOCUMENT_ON_SAVE = "set_source_document_on_save";
    private static final String SAVE_ACTIVE_DOCUMENT = "save_active_document";
    private static final String REQUEST_DOCUMENT_SAVE_COMPLETED = "request_document_save_completed";
+   private static final String REQUEST_DOCUMENT_CLOSE_COMPLETED = "request_document_close_completed";
    private static final String MODIFY_DOCUMENT_PROPERTIES = "modify_document_properties";
    private static final String GET_DOCUMENT_PROPERTIES = "get_document_properties";
    private static final String REVERT_DOCUMENT = "revert_document";
